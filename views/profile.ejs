@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="mx-[8rem]">
+        <div
+            class="blue-line text-white rounded-t-lg inline-block align-middle  bg-blue-600 text-[1.2rem] text-center h-[3rem] w-[18rem]">
+            Welcome , <%= user.firstName%>
+                <%= user.lastName%>
+        </div>
+        <div class=" h-[10rem] bg-gray-100 text-xl text-center h-[3rem] w-[18rem] ">Welcome , <%= user.firstName%>
+                <%= user.lastName%>
+        </div>
+
+        <h2>First Name : <%= user.firstName%>
+        </h2>
+        <h2>Last Name : <%= user.lastName%>
+        </h2>
+        <h2>Gmail : <%= user.email%>
+        </h2>
+
+    </div>
+
+</body>
+
+</html>
