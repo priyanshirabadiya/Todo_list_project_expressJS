@@ -1,0 +1,339 @@
+controller.js
+
+
+// ------------------- all about todo list --------------------
+
+// --------------------- controller ------------------------
+
+// create todo list
+exports.createTodo = async (req, res) => {
+    try {
+        await Todo.create(req.body);
+        res.redirect('/user/success');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while adding a new todo.');
+    }
+}
+
+// get all data from Todo database
+exports.alltodoTasks = async (req, res) => {
+    try {
+        const todos = await Todo.find({});
+        res.render('success', { todos }); // passing todos to the ejs
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while fetching todos.');
+    }
+}
+
+// update todo list
+exports.updateTodo = async (req, res) => {
+    try {
+        const todoId = req.params.id;
+        const updatedTodo = await Todo.findByIdAndUpdate(todoId, { name: req.body.name }, { new: true });
+        if (!updatedTodo) {
+            return res.status(404).send('Todo item not found.');
+        }
+        res.redirect('/user/success');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while updating the todo.');
+    }
+};
+
+
+// delete todo list
+exports.deleteTodo = async (req, res) => {
+    try {
+        const todoId = req.params.id;
+        const deletedTodo = await Todo.findByIdAndDelete(todoId);
+        if (!deletedTodo) {
+            return res.status(404).send('Todo item not found.');
+        }
+        res.status(200).send('Todo item deleted successfully.');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while deleting the todo.');
+    }
+}
+
+// using jwt token
+exports.loginUser = async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email, isDelete: false });
+        if (!user) {
+            res.send({ message: "User not found..." });
+        }
+        let comparepassword = await bcrypt.compare(req.body.password, user.password)
+        // console.log(comparepassword);
+        if (!comparepassword) {
+            res.send("Email or password does not match...");
+        }
+        res.render('success', { user });
+        // const todos = await Todo.find({});
+        // res.render('success', { todos });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({ message: "Internal server error ..." })
+    }
+}
+
+
+
+// --------------------- todo.model.js ----------------------------
+
+
+const mongoose = require('mongoose');
+
+const todoSchema = mongoose.Schema({
+    name : {
+        type : String
+    },
+    completed : {
+        type : Boolean,
+        default : false
+    }
+})
+
+module.exports = mongoose.model('taskoftodo' , todoSchema);
+
+// --------------------- user.model.js ----------------------------
+
+const mongoose = require('mongoose');
+const userSchema = mongoose.Schema({
+    firstName: String,
+    lastName: {
+        type: String
+    },
+    email: {
+        type: String,
+        unique: true,
+        require: true
+    },
+    password: {
+        type: String
+    },
+    mobileNo: {
+        type: String
+    },
+    profileImage : {
+        type : String
+    },
+    isDelete: {
+        type: Boolean,
+        default: false
+    }
+},
+    {
+        versionKey: false,
+        timestamps: true
+    }
+);
+
+module.exports = mongoose.model('todo', userSchema)
+
+
+// -------------------------------------- user.routes.js ------------------------------
+
+const express = require('express');
+const userRoutes = express.Router();
+const Todo = require('../model/todo.model')
+const {
+    registerUser,
+    loginUser,
+    todolist,
+    userProfile,
+    updateTodo,
+    createTodo,
+    deleteTodo,
+    alltodoTasks
+} = require('../controller/user.controller');
+
+const { verifyToken } = require('../helpers/user.verifyToken')
+
+userRoutes.get('/register', (req, res) => {
+    res.render('register', { user: {} });
+});
+
+userRoutes.get('/login', (req, res) => {
+    res.render('login', { user: {} });
+});
+
+userRoutes.post('/register', registerUser);
+
+userRoutes.post('/login', loginUser);
+
+// error
+userRoutes.get('/profile', verifyToken, userProfile);
+
+// show todos when you reach at success page 
+userRoutes.get('/success', alltodoTasks);
+
+// create todo list
+userRoutes.post('/todos', createTodo);
+
+// update todo list
+userRoutes.post('/todos/:id', updateTodo);
+
+// delete todo list
+userRoutes.delete('/todos/:id', deleteTodo);
+
+module.exports = userRoutes;
+
+
+
+/----------------------------------- verifyToken --------------------------------- 
+
+const jwt = require('jsonwebtoken');
+const User = require('../model/user.model');
+
+exports.verifyToken = async (req, res , next ) => {
+    try {
+        let authentication = req.headers['authorization'];
+        // console.log(authentication);
+
+        if (!authentication) {
+            return res.send("Not authentication");
+        }
+        let token = authentication.split(" ")[1];
+        let { userId } = await jwt.verify(token, process.env.JWT_SECRETE);
+        let user = await User.findOne({ _id: userId, isDelete: false });
+        if (!user) {
+            return res.send("User not found...");
+        }
+        req.user = user;
+        next();
+
+    } catch (err) {
+        console.log(err);
+        res.send("Internal server error...");
+    }
+}
+
+---------------------------------------------- success.ejs ------------------
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To do list</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-4 mt-10 text-3xl text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl">
+            Your Personal Task Manager</h1>
+        <p class="mb-6 text-center text-lg font-normal text-gray-500 lg:text-xl">
+            The Profile page is your digital hub, here you can see your profile and also can update
+            it and create todo of day by day.</p>
+
+        <div class="align-content center flex justify-center  ">
+            <a href="/user/profile">
+                <div class="border-2 p-8 rounded-full cursor-pointer ">
+                    <div class="">
+                        <i class="fa-regular fa-user fa-2xl "></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <p class="text-center">open your profile</p>
+        <h1 class="mb-4 mt-10 text-3xl text-center font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl">
+            Your Todo list</h1>
+        <div class="align-content center flex justify-center">
+            <div class="align-content w-[20rem] flex justify-between">
+                <div>Is completed &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div> Task </div>
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Edit </div>
+                <div> Delete </div>
+            </div>
+        </div>
+        <div class="align-content center flex justify-center">
+            <ul class="pt-5 pb-5">
+                <% for (let i = 0; i < todos.length; i++) { %>
+                <li class="py-2 flex justify-center">
+                    <input type="checkbox" class="me-4">
+                    <div class="h-10 w-[10rem] py-5 pt-1 ps-4 text-white bg-blue-500">
+                        <%= todos[i].name %>
+                    </div>
+                    <div>
+                        <i class="fa-regular fa-pen-to-square cursor-pointer ms-5 edit-btn" data-id="<%= todos[i]._id %>" style="color: #787a7d;"></i>
+                    </div>
+                    <div>
+                        <i class="fa-regular fa-trash-can ms-5 cursor-pointer delete-btn" data-id="<%= todos[i]._id %>" style="color: #787a7d;"></i>
+                    </div>
+                </li>
+                <% } %>
+            </ul>
+        </div>
+
+        <div id="edit-form-container" class="hidden align-content center flex justify-center mb-5">
+            <form id="edit-form" method="POST">
+                <input type="text" name="name" id="edit-name" class="border-2 border-black" placeholder="Edit task" required>
+                <button type="submit">Update task</button>
+            </form>
+        </div>
+
+        <div class="align-content center flex justify-center mb-[10rem]">
+            <form action="/user/todos" method="POST">
+                <input type="text" name="name" class="border-2 p-2 border-gray-500 rounded-md " placeholder="New task" autocomplete="off" required>
+                <button type="submit">Add task</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // update task
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const todoId = this.getAttribute('data-id');
+                const todoName = this.closest('li').querySelector('div').innerText.trim();
+                
+                // add whatever you want to add as new task
+                document.getElementById('edit-name').value = todoName;
+                document.getElementById('edit-form').action = `/user/todos/${todoId}`;
+                document.getElementById('edit-form-container').classList.remove('hidden');
+            });
+        });
+
+        // delete task
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const todoId = this.getAttribute('data-id');
+                
+                if (confirm('Are you sure you want to delete this task?')) {
+                    fetch(`/user/todos/${todoId}`, {
+                        method: 'DELETE',
+                    }).then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('Failed to delete the task.');
+                        }
+                    }).catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while deleting the task.');
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+
+

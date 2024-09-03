@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <form action="/user/register" method="POST" >
+    <form method="POST" >
         <section class="h-50" style="background-color: #eee;">
             <div class="container h-100">
                 <div class="row d-flex justify-content-center align-items-center h-100">
@@ -26,7 +26,7 @@
                                             <div class="d-flex flex-row align-items-center mb-4">
                                                 <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                                 <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                                    <input type="text" name="firstName" id="form3Example1c" class="form-control" value="<%= user.firstName || '' %>" />
+                                                    <input type="text" name="firstName" id="form3Example1c" class="form-control"  />
                                                     <label class="form-label" for="form3Example1c">First Name</label>
                                                 </div>
                                             </div>
@@ -34,7 +34,7 @@
                                             <div class="d-flex flex-row align-items-center mb-4">
                                                 <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                                 <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                                    <input type="text" name="lastName" id="form3Example1c" class="form-control" value="<%= user.lastName || '' %>" />
+                                                    <input type="text" name="lastName" id="form3Example1c" class="form-control"  />
                                                     <label class="form-label" for="form3Example1c">Last Name</label>
                                                 </div>
                                             </div>
@@ -42,7 +42,7 @@
                                             <div class="d-flex flex-row align-items-center mb-4">
                                                 <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                                 <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                                    <input type="email" name="email" id="form3Example3c" class="form-control" value="<%= user.email || '' %>" />
+                                                    <input type="email" name="email" id="form3Example3c" class="form-control" />
                                                     <label class="form-label" for="form3Example3c">Your Email</label>
                                                 </div>
                                             </div>
@@ -50,7 +50,7 @@
                                             <div class="d-flex flex-row align-items-center mb-4">
                                                 <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                                 <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                                    <input type="password" name="password" placeholder="Create password"  id="form3Example4c" class="form-control"  value="<%= user.password || '' %>"  required>
+                                                    <input type="password" name="password" placeholder="Create password"  id="form3Example4c" class="form-control"  required>
 
                                                     <label class="form-label" for="form3Example4c">Password</label>
                                                 </div>

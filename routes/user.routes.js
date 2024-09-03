@@ -1,44 +1,49 @@
 const express = require('express');
 const userRoutes = express.Router();
-const Todo = require('../model/todo.model')
 const {
     registerUser,
-    loginUser,
-    todolist,
+    getloginUser,
     userProfile,
-    updateTodo,
-    createTodo,
-    deleteTodo,
-    alltodoTasks
+    successUser,
+    getRegister
 } = require('../controller/user.controller');
+const passport = require('passport');
 
-const { verifyToken } = require('../helpers/user.verifyToken')
+userRoutes.get('/register', getRegister);
 
-userRoutes.get('/register', (req, res) => {
-    res.render('register', { user: {} });
-});
+userRoutes.get('/login', getloginUser);
 
-userRoutes.get('/login', (req, res) => {
-    res.render('login', { user: {} });
-});
+userRoutes.get('/success', successUser);
+
+userRoutes.get('/profile', userProfile);
 
 userRoutes.post('/register', registerUser);
 
-userRoutes.post('/login', loginUser);
+// userRoutes.post('/login', passport.authenticate('local', {
+//     failureRedirect: '/user/login',
+//     failureFlash: 'Invalid email or password.',
+//     successRedirect: '/user/success',
+// }));
 
-// error
-userRoutes.get('/profile', verifyToken, userProfile);
 
-// show todos when you reach at success page 
-userRoutes.get('/success', alltodoTasks);
+userRoutes.post('/login', (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.render('login', { errorMessage: info.message });
+        }
+        req.logIn(user, (err) => {
+            if (err) {
+                return next(err);
+            }
+            return res.redirect('/user/success');
+        });
+    })(req, res, next);
+});
 
-// create todo list
-userRoutes.post('/todos', createTodo);
 
-// update todo list
-userRoutes.post('/todos/:id', updateTodo);
 
-// delete todo list
-userRoutes.delete('/todos/:id', deleteTodo);
 
 module.exports = userRoutes;
