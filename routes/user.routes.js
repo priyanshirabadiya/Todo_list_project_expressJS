@@ -1,13 +1,14 @@
 const express = require('express');
+const passport = require('passport');
 const userRoutes = express.Router();
 const {
     registerUser,
     getloginUser,
     userProfile,
     successUser,
-    getRegister
+    getRegister,
+    postLogin
 } = require('../controller/user.controller');
-const passport = require('passport');
 
 userRoutes.get('/register', getRegister);
 
@@ -19,31 +20,6 @@ userRoutes.get('/profile', userProfile);
 
 userRoutes.post('/register', registerUser);
 
-// userRoutes.post('/login', passport.authenticate('local', {
-//     failureRedirect: '/user/login',
-//     failureFlash: 'Invalid email or password.',
-//     successRedirect: '/user/success',
-// }));
-
-
-userRoutes.post('/login', (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-        if (err) {
-            return next(err);
-        }
-        if (!user) {
-            return res.render('login', { errorMessage: info.message });
-        }
-        req.logIn(user, (err) => {
-            if (err) {
-                return next(err);
-            }
-            return res.redirect('/user/success');
-        });
-    })(req, res, next);
-});
-
-
-
+userRoutes.post('/login', postLogin);
 
 module.exports = userRoutes;

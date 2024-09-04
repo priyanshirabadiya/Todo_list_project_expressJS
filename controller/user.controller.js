@@ -1,5 +1,6 @@
 const User = require('../model/user.model')
 const bcrypt = require('bcrypt');
+const passport = require('passport');
 
 exports.getRegister = async (req, res) => {
     try {
@@ -62,4 +63,15 @@ exports.registerUser = async (req, res) => {
     }
 };
 
+// validation of email and password 
+exports.postLogin = async (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) return res.status(500).json({ success: false, message: 'An error occurred during authentication.' });
+        if (!user) return res.status(400).json({ success: false, message: info.message });
 
+        req.logIn(user, (err) => {
+            if (err) return res.status(500).json({ success: false, message: 'Login failed.' });
+            return res.status(200).json({ success: true });
+        });
+    })(req, res, next);
+}
