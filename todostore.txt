@@ -42,7 +42,6 @@ exports.updateTodo = async (req, res) => {
     }
 };
 
-
 // delete todo list
 exports.deleteTodo = async (req, res) => {
     try {

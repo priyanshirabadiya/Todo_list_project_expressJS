@@ -22,7 +22,6 @@ exports.getloginUser = async (req, res) => {
     }
 }
 
-
 exports.successUser = async (req, res) => {
     try {
         res.render('success');
