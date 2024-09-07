@@ -30,22 +30,21 @@ userRoutes.get('/profile', userProfile);
 
 userRoutes.get('/logout', logoutUser);
 
-// f1 
-// sent otp on email route
-userRoutes.post('/enter-otp', otpVerificationalEmail);
+userRoutes.get("/all-otps" , getotp);
 
+// sent otp and compare 
 userRoutes.get('/enter-email', enterEmail);
+
+userRoutes.post('/enter-otp', otpVerificationalEmail);
 
 userRoutes.post('/verify-otp', verifyOTProute);
 
-
-
-userRoutes.get("/all-otps" , getotp )
-// f2
+// reset-password
 userRoutes.get('/reset-password', resetPasswordFinally);
 
 userRoutes.post('/set-new', setNewPassword);
 
+// register and login  
 userRoutes.post('/register', registerUser);
 
 userRoutes.post('/login', postLogin);

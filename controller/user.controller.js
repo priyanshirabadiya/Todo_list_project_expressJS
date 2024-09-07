@@ -1,6 +1,7 @@
 const User = require('../model/user.model')
 const bcrypt = require('bcrypt');
 const passport = require('passport');
+const otpgenerator = require('otp-generator');
 
 exports.getRegister = async (req, res) => {
     try {
@@ -61,6 +62,16 @@ exports.registerUser = async (req, res) => {
         res.json({ message: "Internal server error..." });
     }
 };
+
+exports.logoutUser = async (req, res) => {
+    try {
+        res.redirect('/user/login');
+    } catch (error) {
+        console.log(error);
+        res.json({ message: "Internal server error..." });
+    }
+}
+
 
 // validation of email and password 
 exports.postLogin = async (req, res, next) => {

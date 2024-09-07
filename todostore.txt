@@ -98,7 +98,7 @@ const todoSchema = mongoose.Schema({
 
 module.exports = mongoose.model('taskoftodo' , todoSchema);
 
-// --------------------- user.model.js ----------------------------
+// --------------------- user.model.js ----------------------
 
 const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
