@@ -26,7 +26,6 @@ app.use(expresssession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(flash());
 
 app.use((req, res, next) => {
