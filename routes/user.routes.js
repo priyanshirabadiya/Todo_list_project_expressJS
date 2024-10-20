@@ -20,7 +20,7 @@ const {
     getotp
 } = require('../controller/otpverify.controller');
 
-userRoutes.get('/register', getRegister);
+// userRoutes.get('/register', getRegister);
 
 userRoutes.get('/login', getloginUser);
 
