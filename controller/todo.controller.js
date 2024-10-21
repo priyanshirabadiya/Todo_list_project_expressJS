@@ -1,22 +1,42 @@
 let Todo = require('../model/todo.model');
 
-exports.getAllTodo = async (req, res) => {
-    try {   
-        let todos = await Todo.find({});
-        return res.send(todos);
+exports.successTodoAll = async (req, res) => {
+    try {
+        const todos = await Todo.find({});
+        // console.log(todos);
+        res.render('success', { todos });
     } catch (error) {
         console.log(error);
-        res.send("Internal server error..");
+        res.status(500).send("Internal server error.");
     }
-}
+};
 
 exports.createTodo = async (req, res) => {
     try {
-        await Todo.create(req.body);
-        res.send("Added success...");
+        await Todo.create({name : req.body.name});
+        res.redirect('/user/successM');
     } catch (error) {
         console.log(error);
         res.send("Internal server error...");
+    }
+}
+
+exports.updatedTodo = async (req, res) => {
+    console.log("PUT route hit");
+    const { id } = req.params;
+    const { name } = req.body;
+    console.log("Params:", req.params);
+    console.log("Body:", req.body);
+    try {
+        const updatedTask = await Todo.findByIdAndUpdate(id, { name: name }, { new: true });
+        if (updatedTask) {
+            console.log('task updated');
+            res.status(200).json({ success: true, Todo: updatedTask });
+        } else {
+            res.status(404).json({ success: false, message: 'Task not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Failed to update task', error });
     }
 }
 
@@ -28,24 +48,41 @@ exports.updateTodo = async (req, res) => {
         if (!updatedTodo) {
             return res.status(404).send('Todo not found..');
         }
-        return res.send("Updated successfully...");
+        return res.redirect('/successM');
+        // return res.send("Updated successfully...");
+
     } catch (error) {
         console.log(error);
         res.send("Internal server error..");
     }
 }
 
+// exports.deleteTodo = async (req, res) => {
+//     try {
+//         let todoId = req.params._id;
+//         let deltodo = await Todo.findByIdAndUpdate(todoId, { isCompleted: true }, { new: true });
+//         if (deltodo) {
+//             res.status(200).json({ success: true, message: 'Task deleted successfully' });
+//         } else {
+//             res.status(404).json({ success: false, message: 'Task not found' });
+//         }
+//     } catch (error) {
+//         console.log(error);
+//         res.send("internal server error...");
+//     }
+// }
+
 exports.deleteTodo = async (req, res) => {
     try {
         let todoId = req.params._id;
-        let deltodo = await Todo.findByIdAndUpdate(todoId, { isCompleted: true }, { new: true });
-        if (!deltodo) {
-            return res.status(404).send("Todo task is not found...");
+        let deltodo = await Todo.findByIdAndDelete(todoId);
+        if (deltodo) {
+            res.status(200).json({ success: true, message: 'Task deleted successfully' });
+        } else {
+            res.status(404).json({ success: false, message: 'Task not found' });
         }
-        return res.send("Task deleted successfully..");
     } catch (error) {
         console.log(error);
-        res.send("internal server error...");
+        res.status(500).json({ success: false, message: "Internal server error..." });
     }
-}
-
+};

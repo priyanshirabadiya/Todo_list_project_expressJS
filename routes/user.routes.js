@@ -1,4 +1,5 @@
 const express = require('express');
+let Todo = require('../model/todo.model');
 const passport = require('passport');
 const userRoutes = express.Router();
 const {
@@ -22,9 +23,9 @@ const {
 
 const {
     createTodo,
-    updateTodo,
+    updatedTodo,
     deleteTodo,
-    getAllTodo
+    successTodoAll
 } = require('../controller/todo.controller');
 
 // userRoutes.get('/register', getRegister);
@@ -57,13 +58,19 @@ userRoutes.post('/register', registerUser);
 userRoutes.post('/login', postLogin);
 
 // todo list
-
-userRoutes.get('/alltodo', getAllTodo);
+userRoutes.get('/successM', successTodoAll);
 
 userRoutes.post('/addtask', createTodo);
 
-userRoutes.put('/updatetodo/:_id', updateTodo);
+userRoutes.post('/delete/:_id', deleteTodo);
 
-userRoutes.delete('/delete/:_id', deleteTodo);
+userRoutes.put('/update-task/:id', updatedTodo);
+
 
 module.exports = userRoutes;
+
+
+
+
+
+

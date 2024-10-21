@@ -637,3 +637,123 @@ exports.verifyToken = async (req, res , next ) => {
 </html> -->
 
 
+
+
+
+-------------------------------------------------------------------------------------------
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To do list</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="success.css">
+</head>
+
+<body>
+    <div class="h-[730px] bg-[#020251] p-0 -mt-[20px]">
+        <div class="container set_bg text-white">
+            <div class="flex justify-between cls_con mx-20 mt-5">
+                <!-- Other content here -->
+            </div>
+
+            <div class="mt-[100px] flex justify-center">
+                <div>
+                    <div class="w-[350px] bg-[white] text-black py-[5px] border rounded">
+                        <h1 class="text-center font-bold" style="cursor: pointer;">Add new task</h1>
+                    </div>
+                    <div class="flex mt-5">
+                        <p>Done</p>
+                        <p class="ms-10">Task</p>
+                        <p class="ms-[188px]">Edit</p>
+                        <p class="ms-5">Delete</p>
+                    </div>
+
+                    <% todos.forEach(todo=> { %>
+                        <div class="mt-5 flex">
+                            <input type="checkbox" style="height: 25px; width: 25px; cursor: pointer;" class="mt-2"
+                                name="">
+                            <input class="p-2 ms-3 text-black rounded task-input"
+                                style="width: 245px; font-weight: bold; outline: none;" type="text"
+                                value="<%= todo.name %>" data-task-id="<%= todo._id %>" readonly>
+                            <i class="fa-solid fa-pen-to-square ms-4 mt-4 fa-xl edit-icon"
+                                style="color: #ffffff; cursor: pointer;"></i>
+                            <i class="fa-solid fa-trash ms-7 mt-4 fa-xl delete-icon" data-task-id="<%= todo._id %>"
+                                style="color: #ffffff; cursor: pointer;"></i>
+                        </div>
+                        <% }) %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.edit-icon').forEach(icon => {
+            icon.addEventListener('click', function () {
+                const input = this.parentElement.querySelector('.task-input');
+                input.removeAttribute('readonly');
+                input.focus();
+                input.style.border = "2px solid #000";
+
+                input.addEventListener('blur', function () {
+                    const taskId = input.getAttribute('data-task-id');
+                    const updatedTask = input.value;
+
+                    fetch(`/user/update-task/${taskId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name: updatedTask }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                input.setAttribute('readonly', true);
+                                input.style.border = "none";
+                                console.log('Task updated successfully');
+                            } else {
+                                console.error('Failed to update task');
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                        });
+                });
+            });
+        });
+
+
+        document.querySelectorAll('.delete-icon').forEach(icon => {
+            icon.addEventListener('click', function () {
+                const taskId = this.getAttribute('data-task-id');
+                fetch(`/user/delete/${taskId}`, {
+                    method: 'POST'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            this.parentElement.remove();
+                            console.log('Task deleted successfully...');
+                        } else {
+                            console.error('Failed to delete task');
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            });
+        });
+
+    </script>
+</body>
+
+</html>
