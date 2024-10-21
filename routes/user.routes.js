@@ -20,6 +20,13 @@ const {
     getotp
 } = require('../controller/otpverify.controller');
 
+const {
+    createTodo,
+    updateTodo,
+    deleteTodo,
+    getAllTodo
+} = require('../controller/todo.controller');
+
 // userRoutes.get('/register', getRegister);
 
 userRoutes.get('/login', getloginUser);
@@ -30,7 +37,7 @@ userRoutes.get('/profile', userProfile);
 
 userRoutes.get('/logout', logoutUser);
 
-userRoutes.get("/all-otps" , getotp);
+userRoutes.get("/all-otps", getotp);
 
 // sent otp and compare 
 userRoutes.get('/enter-email', enterEmail);
@@ -48,5 +55,15 @@ userRoutes.post('/set-new', setNewPassword);
 userRoutes.post('/register', registerUser);
 
 userRoutes.post('/login', postLogin);
+
+// todo list
+
+userRoutes.get('/alltodo', getAllTodo);
+
+userRoutes.post('/addtask', createTodo);
+
+userRoutes.put('/updatetodo/:_id', updateTodo);
+
+userRoutes.delete('/delete/:_id', deleteTodo);
 
 module.exports = userRoutes;

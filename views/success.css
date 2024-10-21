@@ -3,4 +3,6 @@
     background-color: #020251 !important;
 }
 
-
+input[type="checkbox"]{
+    padding: 10px !important;
+}
