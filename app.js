@@ -22,6 +22,11 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const { initalizingPassport } = require('./helpers/passportConfig');
 const { getRegister } = require('./controller/user.controller');
+const {
+    successTodoAll
+} = require('./controller/todo.controller');
+app.get('/', successTodoAll);
+
 initalizingPassport(passport);
 app.use(expresssession({
     secret: process.env.PASSPORT_SECRETE,
@@ -42,19 +47,18 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-app.get('/', getRegister);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGO_URL)
-    .then(() => console.log('Database connection established successfully...'))
-    .catch((err) => console.log(err));
-
-// app.get("/register", userRoutes);
+.then(() => console.log('Database connection established successfully...'))
+.catch((err) => console.log(err));
 
 app.use('/user', userRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+
+

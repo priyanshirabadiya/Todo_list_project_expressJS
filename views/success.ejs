@@ -9,73 +9,75 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="success.css">
+    <style>
+        .completed-task {
+            text-decoration: line-through;
+            color: rgb(135, 134, 134) !important;
+        }
+        #congrats-sound{
+            height: 200px !important;
+            background-color: white !important;
+        }
+    </style>
 </head>
 
-<body>
-    <div class="h-[730px] bg-[#020251] p-0 -mt-[20px]">
-        <div class="container set_bg text-white">
-            <div class="flex justify-between cls_con mx-20 mt-5">
-                <i class="fa-solid fa-list-ol mt-10"></i>
-                <div>
-                    <ul class="flex justify-between mt-10 w-[20vw]">
-                        <li><a href="">STUDY</a></li>
-                        <li><a href="">WORK</a></li>
-                        <li><a href="">PERSONAL</a></li>
-                    </ul>
-                </div>
-                <div class="align-content center flex mt-10 justify-center">
-                    <form action="/user/profile" method="get">
-                        <button type="submit" class="rounded-full flex  cursor-pointer">
-                            <i class="fa-regular fa-user fa-lg"></i>
-                            <p class="-mt-3 ms-2 ">profile</p>
-                        </button>
+<body style="background-color: #020251; height: 730px; padding: 0; margin-top: -20px;">
+    
+    <div class="container set_bg text-white" style="padding: 0;">
+        <div class="flex justify-between cls_con mx-20 mt-5" style="color: white;">
+            <i class="fa-solid fa-list-ol mt-10"></i>
+            <div>
+                <ul class="flex justify-center mt-10" style="width: 20vw;">
+                    <li class="text-[20px] font-bold" >Stay Organized, Stay Productive!</li>
+                </ul>
+            </div>
+            <div class="align-content center flex mt-10 justify-center">
+                <form action="" method="get">
+                    <button type="submit" class="rounded-full flex cursor-pointer" style="color: white;">
+                        <i class="fa-regular fa-user fa-lg"></i>
+                        <p style="margin-top: -12px; margin-left: 8px;">profile</p>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-[100px] flex justify-center">
+            <div>
+                <div
+                    style="width: 350px; background-color: white; color: black; padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+                    <form id="add-task-form" action="/user/addtask" method="POST">
+                        <div class="flex justify-center" style="margin-left: 100px;">
+                            <input type="text" name="name" placeholder="Enter new task"
+                                class="p-2 ms-3 text-black rounded task-input"
+                                style="width: 245px; font-weight: bold; outline: none; padding: 8px;" autocomplete="off"
+                                required>
+                        </div>
+                        <div class="flex justify-center">
+                            <button type="submit"
+                                style="text-align: center; font-weight: bold; background-color: #1d4ed8; color: white; padding: 8px; border-radius: 5px; margin-left: 12px;">
+                                Add New Task</button>
+                        </div>
                     </form>
                 </div>
-            </div>
-
-            <div class="mt-[100px] flex justify-center">
-                <div>
-                    <!-- <div class="w-[350px] bg-[white] text-black py-[5px] border rounded">
-                        <h1 class="text-center font-bold" style="cursor: pointer;">Add new task</h1>
-                    </div> -->
-
-                    <div class="w-[350px] bg-[white] text-black py-[5px] border rounded">
-                        <!-- Added a form here to create a new task -->
-                        <form id="add-task-form" action="/user/addtask" method="POST">
-                            <div class="flex ms-[100px] justify-center">
-                                <input type="text" name="name" placeholder="Enter new task"
-                                    class="p-2 ms-3 text-black rounded task-input"
-                                    style="width: 245px; font-weight: bold; outline: none;" required>
-                            </div>
-                            <div class="flex justify-center">
-                                <button type="submit"
-                                    class="text-center font-bold bg-blue-500 text-white p-2 rounded ml-3">Add New
-                                    Task</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="flex mt-5">
-                        <p>Done</p>
-                        <p class="ms-10">Task</p>
-                        <p class="ms-[188px]">Edit</p>
-                        <p class="ms-5">Delete</p>
-                    </div>
-
-                    <% todos.forEach(todo=> { %>
-                        <div class="mt-5 flex">
-                            <input type="checkbox" style="height: 25px; width: 25px; cursor: pointer;" class="mt-2"
-                                name="">
-                            <input class="p-2 ms-3 text-black rounded task-input"
-                                style="width: 245px; font-weight: bold; outline: none;" type="text"
-                                value="<%= todo.name %>" data-task-id="<%= todo._id %>" readonly>
-                            <i class="fa-solid fa-pen-to-square ms-4 mt-4 fa-xl edit-icon"
-                                style="color: #ffffff; cursor: pointer;"></i>
-                            <i class="fa-solid fa-trash ms-7 mt-4 fa-xl delete-icon" data-task-id="<%= todo._id %>"
-                                style="color: #ffffff; cursor: pointer;"></i>
-                        </div>
-                        <% }) %>
+                <div class="flex mt-5" style="color: white;">
+                    <p>Done</p>
+                    <p style="margin-left: 40px;">Task</p>
+                    <p style="margin-left: 188px;">Edit</p>
+                    <p style="margin-left: 20px;">Delete</p>
                 </div>
+                <% todos.forEach(todo=> { %>
+                    <div class="mt-5 flex">
+                        <input type="checkbox" style="height: 25px; width: 25px; cursor: pointer; margin-top: 8px;"
+                            name="" data-task-id="<%= todo._id%>">
+                        <input class="p-2 ms-3 text-black rounded task-input"
+                            style="width: 245px; font-weight: bold; outline: none; padding: 8px;" type="text"
+                            value="<%= todo.name %>" data-task-id="<%= todo._id %>" readonly>
+                        <i class="fa-solid fa-pen-to-square ms-4 mt-4 fa-xl edit-icon"
+                            style="color: white; cursor: pointer; margin-left: 16px; margin-top: 16px;"></i>
+                        <i class="fa-solid fa-trash ms-7 mt-4 fa-xl delete-icon" data-task-id="<%= todo._id %>"
+                            style="color: white; cursor: pointer; margin-left: 28px; margin-top: 16px;"></i>
+                    </div>
+                    <% }) %>
             </div>
         </div>
     </div>
@@ -116,7 +118,6 @@
             });
         });
 
-
         document.querySelectorAll('.delete-icon').forEach(icon => {
             icon.addEventListener('click', function () {
                 const taskId = this.getAttribute('data-task-id');
@@ -137,6 +138,18 @@
                     });
             });
         });
+
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const taskInput = this.nextElementSibling;
+                if (this.checked) {
+                    taskInput.classList.add('completed-task');
+                } else {
+                    taskInput.classList.remove('completed-task');
+                }
+            });
+        });
+
     </script>
 </body>
 
