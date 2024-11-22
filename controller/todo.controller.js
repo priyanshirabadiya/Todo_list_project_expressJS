@@ -13,7 +13,7 @@ exports.successTodoAll = async (req, res) => {
 
 exports.createTodo = async (req, res) => {
     try {
-        await Todo.create({name : req.body.name});
+        await Todo.create({ name: req.body.name });
         res.redirect('/user/successM');
     } catch (error) {
         console.log(error);
@@ -56,21 +56,6 @@ exports.updateTodo = async (req, res) => {
         res.send("Internal server error..");
     }
 }
-
-// exports.deleteTodo = async (req, res) => {
-//     try {
-//         let todoId = req.params._id;
-//         let deltodo = await Todo.findByIdAndUpdate(todoId, { isCompleted: true }, { new: true });
-//         if (deltodo) {
-//             res.status(200).json({ success: true, message: 'Task deleted successfully' });
-//         } else {
-//             res.status(404).json({ success: false, message: 'Task not found' });
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         res.send("internal server error...");
-//     }
-// }
 
 exports.deleteTodo = async (req, res) => {
     try {

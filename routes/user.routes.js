@@ -28,7 +28,7 @@ const {
     successTodoAll
 } = require('../controller/todo.controller');
 
-// userRoutes.get('/register', getRegister);
+userRoutes.get('/register', getRegister);
 
 userRoutes.get('/login', getloginUser);
 
@@ -68,9 +68,3 @@ userRoutes.put('/update-task/:id', updatedTodo);
 
 
 module.exports = userRoutes;
-
-
-
-
-
-

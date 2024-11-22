@@ -14,7 +14,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 // --------------------- passport ---------------------
 
 const expresssession = require('express-session');
@@ -25,7 +24,13 @@ const { getRegister } = require('./controller/user.controller');
 const {
     successTodoAll
 } = require('./controller/todo.controller');
-app.get('/', successTodoAll);
+
+const {
+    getloginUser
+} = require('./controller/user.controller');
+
+// app.get('/', successTodoAll);
+app.get('/', getloginUser);
 
 initalizingPassport(passport);
 app.use(expresssession({
@@ -52,8 +57,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGO_URL)
-.then(() => console.log('Database connection established successfully...'))
-.catch((err) => console.log(err));
+    .then(() => console.log('Database connection established successfully...'))
+    .catch((err) => console.log(err));
 
 app.use('/user', userRoutes);
 
