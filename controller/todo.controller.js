@@ -13,7 +13,7 @@ exports.successTodoAll = async (req, res) => {
 
 exports.createTodo = async (req, res) => {
     try {
-        await Todo.create({ name: req.body.name });
+        await Todo.create({ task: req.body.task });
         res.redirect('/user/successM');
     } catch (error) {
         console.log(error);

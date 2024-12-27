@@ -52,7 +52,7 @@ userRoutes.get('/reset-password', resetPasswordFinally);
 
 userRoutes.post('/set-new', setNewPassword);
 
-// register and login  
+// register and login
 userRoutes.post('/register', registerUser);
 
 userRoutes.post('/login', postLogin);
@@ -65,6 +65,5 @@ userRoutes.post('/addtask', createTodo);
 userRoutes.post('/delete/:_id', deleteTodo);
 
 userRoutes.put('/update-task/:id', updatedTodo);
-
 
 module.exports = userRoutes;

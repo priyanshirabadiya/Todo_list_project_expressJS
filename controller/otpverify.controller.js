@@ -52,9 +52,7 @@ exports.otpVerificationalEmail = async (req, res) => {
 
         // send email
         await transport.sendMail(mailOptions);
-
         res.render('verifyotp');
-
     } catch (error) {
         console.log("OTP error:", error);
         res.status(500).send('Internal server error');
@@ -67,7 +65,6 @@ exports.getotp = async (req, res) => {
         res.json({ ans });
     } catch (error) {
         console.log(error);
-
     }
 }
 
@@ -122,8 +119,8 @@ exports.setNewPassword = async (req, res) => {
 
         // clear the userId from the session storage
         req.session.userId = null;
-
-        res.json({ message: 'Password has been successfully reset' });
+        // res.json({ message: 'Password has been successfully reset' });
+        res.render('login');
     } catch (error) {
         console.log('Error for resetting password :', error);
         res.status(500).json({ message: 'Internal server error' });

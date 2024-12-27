@@ -29,6 +29,4 @@ const userSchema = mongoose.Schema({
     }
 );
 
-module.exports = mongoose.model('todo', userSchema)
-
-
+module.exports = mongoose.model('users', userSchema);

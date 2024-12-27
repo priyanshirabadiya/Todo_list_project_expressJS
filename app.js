@@ -60,6 +60,7 @@ mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('Database connection established successfully...'))
     .catch((err) => console.log(err));
 
+
 app.use('/user', userRoutes);
 
 app.listen(port, () => {

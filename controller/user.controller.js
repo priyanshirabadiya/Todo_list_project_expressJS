@@ -16,7 +16,7 @@ exports.getRegister = async (req, res) => {
 
 exports.getloginUser = async (req, res) => {
     try {
-        let error_msg = "none"
+        let error_msg = "none";
         res.render('login', { error_msg });
     }
     catch (error) {
@@ -59,7 +59,7 @@ exports.registerUser = async (req, res) => {
         let todos = await Todo.find({});
         let hashpassword = await bcrypt.hash(req.body.password, 10); // Ensure this is correct
         user = await User.create({ ...req.body, password: hashpassword });
-        return res.render('success', { user }, { todos });
+        return res.render('success', { user , todos });
     } catch (error) {
         console.log(error);
         res.json({ message: "Internal server error..." });
