@@ -16,7 +16,7 @@ const todoSchema = mongoose.Schema({
 },
     {
         timestamps: true,
-        versinKey: false
+        versionKey: false
     })
 
 module.exports = mongoose.model('taskoftodo', todoSchema);

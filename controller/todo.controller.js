@@ -13,7 +13,9 @@ exports.successTodoAll = async (req, res) => {
 
 exports.createTodo = async (req, res) => {
     try {
-        await Todo.create({ task: req.body.task });
+        console.log("what req.body get :",req.body);
+        let todoIs = await Todo.create({ task: req.body.task });
+        // console.log(todoIs);
         res.redirect('/user/successM');
     } catch (error) {
         console.log(error);
@@ -28,7 +30,7 @@ exports.updatedTodo = async (req, res) => {
     console.log("Params:", req.params);
     console.log("Body:", req.body);
     try {
-        const updatedTask = await Todo.findByIdAndUpdate(id, { name: name }, { new: true });
+        const updatedTask = await Todo.findByIdAndUpdate(id, { task: name }, { new: true });
         if (updatedTask) {
             console.log('task updated');
             res.status(200).json({ success: true, Todo: updatedTask });
@@ -37,23 +39,6 @@ exports.updatedTodo = async (req, res) => {
         }
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to update task', error });
-    }
-}
-
-exports.updateTodo = async (req, res) => {
-    try {
-        let todoId = req.params._id;
-        console.log(todoId, "ID IS THIS");
-        let updatedTodo = await Todo.findByIdAndUpdate(todoId, { name: req.body.name }, { new: true });
-        if (!updatedTodo) {
-            return res.status(404).send('Todo not found..');
-        }
-        return res.redirect('/successM');
-        // return res.send("Updated successfully...");
-
-    } catch (error) {
-        console.log(error);
-        res.send("Internal server error..");
     }
 }
 

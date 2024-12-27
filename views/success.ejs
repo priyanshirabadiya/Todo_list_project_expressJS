@@ -14,7 +14,8 @@
             text-decoration: line-through;
             color: rgb(135, 134, 134) !important;
         }
-        #congrats-sound{
+
+        #congrats-sound {
             height: 200px !important;
             background-color: white !important;
         }
@@ -22,13 +23,13 @@
 </head>
 
 <body style="background-color: #020251; height: 730px; padding: 0; margin-top: -20px;">
-    
+
     <div class="container set_bg text-white" style="padding: 0;">
         <div class="flex justify-between cls_con mx-20 mt-5" style="color: white;">
             <i class="fa-solid fa-list-ol mt-10"></i>
             <div>
                 <ul class="flex justify-center mt-10" style="width: 20vw;">
-                    <li class="text-[20px] font-bold" >Stay Organized, Stay Productive!</li>
+                    <li class="text-[20px] font-bold">Stay Organized, Stay Productive!</li>
                 </ul>
             </div>
             <div class="align-content center flex mt-10 justify-center">
@@ -47,7 +48,7 @@
                     style="width: 350px; background-color: white; color: black; padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
                     <form id="add-task-form" action="/user/addtask" method="POST">
                         <div class="flex justify-center" style="margin-left: 100px;">
-                            <input type="text" name="name" placeholder="Enter new task"
+                            <input type="text" name="task" placeholder="Enter new task"
                                 class="p-2 ms-3 text-black rounded task-input"
                                 style="width: 245px; font-weight: bold; outline: none; padding: 8px;" autocomplete="off"
                                 required>
@@ -71,7 +72,7 @@
                             name="" data-task-id="<%= todo._id%>">
                         <input class="p-2 ms-3 text-black rounded task-input"
                             style="width: 245px; font-weight: bold; outline: none; padding: 8px;" type="text"
-                            value="<%= todo.name %>" data-task-id="<%= todo._id %>" readonly>
+                            value="<%= todo.task %>" data-task-id="<%= todo._id %>" readonly>
                         <i class="fa-solid fa-pen-to-square ms-4 mt-4 fa-xl edit-icon"
                             style="color: white; cursor: pointer; margin-left: 16px; margin-top: 16px;"></i>
                         <i class="fa-solid fa-trash ms-7 mt-4 fa-xl delete-icon" data-task-id="<%= todo._id %>"

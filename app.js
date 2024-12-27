@@ -13,7 +13,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 // --------------------- passport ---------------------
 
 const expresssession = require('express-session');
@@ -21,15 +22,11 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const { initalizingPassport } = require('./helpers/passportConfig');
 const { getRegister } = require('./controller/user.controller');
-const {
-    successTodoAll
-} = require('./controller/todo.controller');
 
 const {
     getloginUser
 } = require('./controller/user.controller');
 
-// app.get('/', successTodoAll);
 app.get('/', getloginUser);
 
 initalizingPassport(passport);
@@ -53,8 +50,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log('Database connection established successfully...'))
