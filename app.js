@@ -19,10 +19,15 @@ app.use(bodyParser.json());
 
 const expresssession = require('express-session');
 const flash = require('connect-flash');
+const session = require('express-session');
 const passport = require('passport');
 const { initalizingPassport } = require('./helpers/passportConfig');
 const { getRegister } = require('./controller/user.controller');
-
+app.use(session({
+    secret: process.env.PASSPORT_SECRETE, 
+    resave: false,
+    saveUninitialized: false,
+}));
 const {
     getloginUser
 } = require('./controller/user.controller');
@@ -38,6 +43,8 @@ app.use(expresssession({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use((req, res, next) => {
     const errorMsg = req.flash('error');
@@ -61,5 +68,3 @@ app.use('/user', userRoutes);
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
-
-

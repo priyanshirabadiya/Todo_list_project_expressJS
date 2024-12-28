@@ -11,7 +11,7 @@ const todoSchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'users',
-        require: true
+        // require: true
     }
 },
     {

@@ -30,5 +30,3 @@ exports.initalizingPassport = (passport) => {
         }
     })
 }
-
-

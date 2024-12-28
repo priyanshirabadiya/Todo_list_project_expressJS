@@ -1,8 +1,6 @@
 const User = require('../model/user.model')
-const Todo = require('../model/todo.model');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const otpgenerator = require('otp-generator');
 
 exports.getRegister = async (req, res) => {
     try {
@@ -56,24 +54,22 @@ exports.registerUser = async (req, res) => {
         if (user) {
             return res.json({ message: "User already exists..." });
         }
-        let todos = await Todo.find({});
         let hashpassword = await bcrypt.hash(req.body.password, 10); // Ensure this is correct
         user = await User.create({ ...req.body, password: hashpassword });
-        return res.render('success', { user , todos });
+
+        let todos = [];
+        req.logIn(user, (err) => {
+            if (err) {
+                console.log("Login after registration failed:", err);
+                return res.status(500).send("Login failed after registration.");
+            }
+            return res.render('success', { user, todos });
+        })
     } catch (error) {
         console.log(error);
         res.json({ message: "Internal server error..." });
     }
 };
-
-exports.logoutUser = async (req, res) => {
-    try {
-        res.redirect('/user/login');
-    } catch (error) {
-        console.log(error);
-        res.json({ message: "Internal server error..." });
-    }
-}
 
 // validation of email and password 
 exports.postLogin = async (req, res, next) => {
@@ -86,4 +82,13 @@ exports.postLogin = async (req, res, next) => {
             return res.status(200).json({ success: true });
         });
     })(req, res, next);
+}
+
+exports.logoutUser = async (req, res) => {
+    try {
+        res.redirect('/user/login');
+    } catch (error) {
+        console.log(error);
+        res.json({ message: "Internal server error..." });
+    }
 }

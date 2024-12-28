@@ -2,9 +2,14 @@ let Todo = require('../model/todo.model');
 
 exports.successTodoAll = async (req, res) => {
     try {
-        const todos = await Todo.find({});
-        // console.log(todos);
-        res.render('success', { todos });
+        console.log("login user is:", req.user._id);
+        if (!req.user) {
+            return res.status(401).send("Unauthorized: User not logged in");
+        }
+        const todos = await Todo.find({ userId: req.user._id });
+        console.log("Todos are : ", todos);
+        res.render('success', { todos, user: req.user }); // Pass user and todos
+
     } catch (error) {
         console.log(error);
         res.status(500).send("Internal server error.");
@@ -13,15 +18,19 @@ exports.successTodoAll = async (req, res) => {
 
 exports.createTodo = async (req, res) => {
     try {
-        console.log("what req.body get :",req.body);
-        let todoIs = await Todo.create({ task: req.body.task });
-        // console.log(todoIs);
-        res.redirect('/user/successM');
+        // console.log("what req.body get:", req.body);
+        if (!req.user) {
+            return res.status(401).send("Unauthorized: User not logged in");
+        }
+        const userId = req.user._id; // Get userId from req.user
+        // Add userId to the task
+        let todo = await Todo.create({ task: req.body.task, userId: userId });
+        res.redirect('/user/successM'); // Redirect to success page
     } catch (error) {
         console.log(error);
         res.send("Internal server error...");
     }
-}
+};
 
 exports.updatedTodo = async (req, res) => {
     console.log("PUT route hit");

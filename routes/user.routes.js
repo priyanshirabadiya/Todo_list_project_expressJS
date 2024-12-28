@@ -28,6 +28,8 @@ const {
     successTodoAll
 } = require('../controller/todo.controller');
 
+const isAuthenticated = require('../helpers/auth.middleware');
+
 userRoutes.get('/register', getRegister);
 
 userRoutes.get('/login', getloginUser);
@@ -58,9 +60,9 @@ userRoutes.post('/register', registerUser);
 userRoutes.post('/login', postLogin);
 
 // todo list
-userRoutes.get('/successM', successTodoAll);
+userRoutes.post('/addtask', isAuthenticated, createTodo);
 
-userRoutes.post('/addtask', createTodo);
+userRoutes.get('/successM', isAuthenticated, successTodoAll);
 
 userRoutes.post('/delete/:_id', deleteTodo);
 
